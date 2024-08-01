@@ -13,6 +13,12 @@ const PORT = Number(env(ENV_VARS.PORT, '3000'));
 export const setupServer = () => {
   const app = express();
 
+  app.use(
+    express.json({
+      type: ['application/json', 'application/vnd.api+json'],
+    }),
+  );
+
   const pino = pinoHttp({
     transport: { target: 'pino-pretty' },
   });
