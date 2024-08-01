@@ -22,9 +22,10 @@ const contactSchema = new Schema(
       type: String,
       enum: ['work', 'home', 'personal'],
       default: 'personal',
+      required: true,
     },
   },
   { timestamps: true },
 );
 
-export const contactsCollection = model('contacts', contactSchema);
+export const contactsCollection = model('Contact', contactSchema);
