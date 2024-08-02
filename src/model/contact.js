@@ -25,7 +25,10 @@ const contactSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true, versionKey: false },
+  },
 );
 
 export const contactsCollection = model('Contact', contactSchema);
