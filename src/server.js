@@ -36,7 +36,7 @@ export const setupServer = () => {
     res.send('Contacts app');
   });
 
-  app.use(contactsRouter);
+  app.use('/contacts', contactsRouter);
 
   app.use('*', notFoundHandler);
 
