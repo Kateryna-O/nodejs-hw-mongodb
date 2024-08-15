@@ -4,9 +4,10 @@ import pinoHttp from 'pino-http';
 
 import { ENV_VARS } from './constants/index.js';
 import { env } from './utils/env.js';
-import contactsRouter from './routers/contacts.js';
+
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
+import router from './routers/index.js';
 
 const PORT = Number(env(ENV_VARS.PORT, '3000'));
 
@@ -36,7 +37,7 @@ export const setupServer = () => {
     res.send('Contacts app');
   });
 
-  app.use('/contacts', contactsRouter);
+  app.use(router);
 
   app.use('*', notFoundHandler);
 
