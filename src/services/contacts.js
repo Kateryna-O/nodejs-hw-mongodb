@@ -7,16 +7,17 @@ export const getAllContacts = async ({
   perPage = 10,
   sortOrder = SORT_ORDER.ASC,
   sortBy = '_id',
+  userId,
 }) => {
   try {
     const limit = perPage;
     const skip = (page - 1) * perPage;
 
-    const contactsQuery = contactsCollection.find();
+    const contactsQuery = contactsCollection.find({ userId });
     const contactsCount = await contactsCollection
       .find()
       .merge()
-      .countDocuments();
+      .countDocuments({ userId });
     const contacts = await contactsQuery
       .skip(skip)
       .limit(limit)
@@ -38,9 +39,12 @@ export const getAllContacts = async ({
   }
 };
 
-export const getContactsById = async (contactId) => {
+export const getContactsById = async (contactId, userId) => {
   try {
-    const contacts = await contactsCollection.findById(contactId);
+    const contacts = await contactsCollection.findOne({
+      _id: contactId,
+      userId,
+    });
     return contacts;
   } catch (error) {
     console.error('Error fetching contacts:', error);
@@ -53,14 +57,22 @@ export const createContact = async (payload) => {
   return contact;
 };
 
-export const deleteContactById = async (contactId) => {
-  const contact = await contactsCollection.findOneAndDelete(contactId);
+export const deleteContactById = async (contactId, userId) => {
+  const contact = await contactsCollection.findOneAndDelete({
+    _id: contactId,
+    userId,
+  });
   return contact;
 };
 
-export const updateContact = async (contactId, payload, options = {}) => {
+export const updateContact = async (
+  contactId,
+  payload,
+  userId,
+  options = {},
+) => {
   const rawResult = await contactsCollection.findOneAndUpdate(
-    { _id: contactId },
+    { _id: contactId, userId },
     payload,
     {
       new: true,

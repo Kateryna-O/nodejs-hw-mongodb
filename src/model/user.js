@@ -19,15 +19,3 @@ usersShema.method.toJSON = function () {
 };
 
 export const UsersCollection = model('users', usersShema);
-
-// const sessionShema = new Schema(
-//   {
-//     userId: { type: String, require: true },
-//     accessToken: { type: String, required: true },
-//     refreshToken: { type: String, required: true },
-//   },
-//   {
-//     timestamps: true,
-//     versionKey: false,
-//   },
-// );
