@@ -10,10 +10,15 @@ export const registerUser = async (payload) => {
   if (user) throw createHttpError(409, 'Email in use');
 
   const encrytedPassword = await bcrypt.hash(payload.password, 10);
-  return await UsersCollection.create({
+  const newUser = await UsersCollection.create({
     ...payload,
     password: encrytedPassword,
   });
+
+  const userWithoutPassword = newUser.toObject();
+  delete userWithoutPassword.password;
+
+  return userWithoutPassword;
 };
 
 export const loginUser = async (payload) => {
