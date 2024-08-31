@@ -29,10 +29,11 @@ const contactSchema = new Schema(
       ref: 'users',
       require: true,
     },
+    photo: { type: String },
   },
   {
     timestamps: true,
-    toJSON: { virtuals: true, versionKey: false },
+    versionKey: false,
   },
 );
 
