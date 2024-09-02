@@ -12,6 +12,8 @@ import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 import { env } from '../utils/env.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
+import * as fs from 'node:fs/promises';
+
 export const getContactsController = async (req, res, next) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
@@ -47,10 +49,22 @@ export const getContactController = async (req, res, next) => {
 export const createContactController = async (req, res, next) => {
   const { body, user, file } = req;
 
+  let photo = null;
+  if (file) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      const result = await saveFileToCloudinary(file.path);
+      await fs.unlink(file.path);
+
+      photo = result.secure_url;
+    } else {
+      photo = await saveFileToUploadDir(file);
+    }
+  }
+
   const contact = await createContact({
     ...body,
     userId: user._id,
-    photo: file,
+    photo,
   });
 
   res.status(201).send({
