@@ -49,7 +49,7 @@ export const getContactController = async (req, res, next) => {
 export const createContactController = async (req, res, next) => {
   const { body, user, file } = req;
 
-  let photo = null;
+  let photo;
   if (file) {
     if (process.env.ENABLE_CLOUDINARY === 'true') {
       const result = await saveFileToCloudinary(file.path);
