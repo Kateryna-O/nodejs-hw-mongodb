@@ -51,6 +51,7 @@ export const createContactController = async (req, res, next) => {
   if (typeof req.file !== 'undefined') {
     if (process.env.ENABLE_CLOUDINARY === 'true') {
       const result = await saveFileToCloudinary(req.file.path);
+      console.log(result);
       photo = result.secure_url;
       await fs.unlink(req.file.path);
     } else {
