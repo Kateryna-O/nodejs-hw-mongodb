@@ -13,8 +13,7 @@ cloudinary.v2.config({
 });
 
 export const saveFileToCloudinary = async (file) => {
-  console.log('Uploading file to Cloudinary:', file);
-  const response = await cloudinary.v2.uploader.upload(file);
-  await fs.unlink(file);
-  return response.secure_url;
+  const response = await cloudinary.v2.uploader.upload(file.path);
+  await fs.unlink(file.path);
+  return response;
 };
