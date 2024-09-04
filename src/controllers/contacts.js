@@ -13,7 +13,6 @@ import { env } from '../utils/env.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 import * as fs from 'node:fs/promises';
-import { parseWithoutProcessing } from 'handlebars';
 
 export const getContactsController = async (req, res, next) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -89,7 +88,7 @@ export const patchContactController = async (req, res, next) => {
   let photoUrl;
   if (photo) {
     if (env('ENABLE_CLOUDINARY') === 'true') {
-      photoUrl = await saveFileToCloudinary(parseWithoutProcessing);
+      photoUrl = await saveFileToCloudinary(photo.path);
     } else {
       photoUrl = await saveFileToUploadDir(photo);
     }
