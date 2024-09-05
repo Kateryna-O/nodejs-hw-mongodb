@@ -1,11 +1,13 @@
 import { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL } from '../constants/index.js';
 import {
+  loginOrSigupWithGoogle,
   loginUser,
   logoutUser,
   refreshUsersSession,
   requestResetToken,
   resetPassword,
 } from '../services/auth.js';
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
 
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
@@ -82,5 +84,29 @@ export const resetPasswordController = async (req, res) => {
     status: 200,
     message: 'Password was successfully!',
     data: {},
+  });
+};
+
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+  });
+};
+
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSigupWithGoogle(req.body.code);
+  setupSession(res, session);
+
+  res.send({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: {
+      accessToken: session.accessToken,
+    },
   });
 };
